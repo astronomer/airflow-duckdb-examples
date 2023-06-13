@@ -1,5 +1,5 @@
 """
-### Load information from a local CSV file into DuckDB and MotherDuck
+### Use Airflow together with DuckDB and MotherDuck
 
 This DAG shows examples of how to interact with DuckDB and MotherDuck from within 
 TaskFlow tasks. The tasks interacting with MotherDuck will need a MotherDuck token.
@@ -20,6 +20,8 @@ LOCAL_DUCKDB_STORAGE_PATH = "include/my_local_ducks.db"
 def duckdb_in_taskflow():
     @task
     def create_table_in_memory_db_1():
+        "Create and query a temporary in-memory DuckDB database."
+
         in_memory_duck_table_1 = duckdb.sql(
             f"SELECT * FROM read_csv_auto('{CSV_PATH}', header=True);"
         )
@@ -30,6 +32,8 @@ def duckdb_in_taskflow():
 
     @task
     def create_table_in_memory_db_2():
+        "Create and query a temporary in-memory DuckDB database."
+
         conn = duckdb.connect()
         conn.sql(
             f"""CREATE TABLE IF NOT EXISTS in_memory_duck_table_2 AS 
@@ -42,6 +46,7 @@ def duckdb_in_taskflow():
 
     @task
     def create_pandas_df():
+        "Create a pandas DataFrame with toy data and return it."
         ducks_in_my_garden_df = pd.DataFrame(
             {"colors": ["blue", "red", "yellow"], "numbers": [2, 3, 4]}
         )
@@ -50,6 +55,8 @@ def duckdb_in_taskflow():
 
     @task
     def create_table_from_pandas_df(ducks_in_my_garden_df):
+        "Create a table in MotherDuck based on a pandas DataFrame."
+
         conn = duckdb.connect(f"motherduck:?token={MOTHERDUCK_TOKEN}")
         conn.sql(
             f"""CREATE TABLE IF NOT EXISTS ducks_garden AS 
@@ -58,6 +65,8 @@ def duckdb_in_taskflow():
 
     @task
     def create_table_in_local_persistent_storage(local_duckdb_storage_path):
+        "Create a table in a local persistent DuckDB database."
+
         conn = duckdb.connect(local_duckdb_storage_path)
         conn.sql(
             f"""CREATE TABLE IF NOT EXISTS persistent_duck_table AS 
@@ -70,6 +79,8 @@ def duckdb_in_taskflow():
 
     @task
     def query_persistent_local_storage(local_duckdb_storage_path):
+        "Query a table in a local persistent DuckDB database."
+
         conn = duckdb.connect(local_duckdb_storage_path)
         species_with_blue_in_name = conn.sql(
             """SELECT species_name FROM persistent_duck_table 
@@ -86,6 +97,8 @@ def duckdb_in_taskflow():
 
     @task
     def csv_file_to_motherduck():
+        "Load data from a CSV file into a table in MotherDuck."
+
         conn = duckdb.connect(f"md:?token={MOTHERDUCK_TOKEN}")
         conn.sql(
             f"""CREATE TABLE IF NOT EXISTS duck_species_table AS 
@@ -98,6 +111,8 @@ def duckdb_in_taskflow():
 
     @task
     def local_table_to_motherduck(local_duckdb_storage_path):
+        "Load data from a local DuckDB table into a table in MotherDuck."
+        
         conn = duckdb.connect(f"md:?token={MOTHERDUCK_TOKEN}")
         conn.execute(f"ATTACH '{local_duckdb_storage_path}'")
         databases = conn.execute("SHOW DATABASES").fetchall()

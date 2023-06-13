@@ -1,6 +1,8 @@
 """
-### Use a custom ExcelToDuckDBOperator
+### Use the custom ExcelToDuckDBOperator based upon the DuckDBHook
 
+This simple DAG shows the custom ExcelToDuckDBOperator in use. The custom operator
+can be found in include/custom_operators/duckdb_operator.py.
 """
 
 from airflow.decorators import dag

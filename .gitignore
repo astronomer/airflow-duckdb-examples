@@ -5,3 +5,5 @@ airflow_settings.yaml
 __pycache__/
 astro
 include/my_local_ducks.db
+include/ultimate_duck
+dags/motherduck_sdk.py
