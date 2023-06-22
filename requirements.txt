@@ -2,4 +2,3 @@
 duckdb==0.8.0
 airflow-provider-duckdb==0.1.0
 astro-sdk-python[duckdb]==1.6.1
-pandas==2.0.2
