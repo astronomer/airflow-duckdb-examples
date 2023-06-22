@@ -1,49 +1,44 @@
-Overview
-========
+# Airflow DuckDB examples
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+Welcome :wave: !
 
-Project Contents
-================
+This is a small toy repository for you to test different ways of connection [Airflow](https://airflow.apache.org/), [DuckDB](https://duckdb.org/) and [MotherDuck](https://motherduck.com/). :duck: 
 
-Your Astro project contains the following files and folders:
+> If you are new to Airflow consider checking out our [quickstart repository](https://github.com/astronomer/airflow-quickstart) and [Get started tutorial](https://docs.astronomer.io/learn/get-started-with-airflow).  
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes two example DAGs:
-    - `example_dag_basic`: This DAG shows a simple ETL data pipeline example with three TaskFlow API tasks that run daily.
-    - `example_dag_advanced`: This advanced DAG showcases a variety of Airflow features like branching, Jinja templates, task groups and several Airflow operators.
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+## How to use this repository
 
-Deploy Your Project Locally
-===========================
+1. Make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+2. Install the [Astro CLI](https://docs.astronomer.io/astro/cli/install-cli).
+3. Clone this repository.
+4. Create a `.env` file with the contents of the provided `.env.example` file. If you are using MotherDuck, provide your MotherDuck token.
+5. Start Airflow by running `astro dev start`.
 
-1. Start Airflow on your local machine by running 'astro dev start'.
+6. In the Airflow UI define the following [Airflow connections](https://docs.astronomer.io/learn/connections):
+    - `my_local_duckdb_conn` with the following parameters:
+        - Conn Type: `duckdb`
+        - File (leave blank for in-memory database): `include/my_local_ducks`
+    - `my_motherduck_conn` with the following parameters:
+        - Conn Type: `duckdb`
+        - File (leave blank for in-memory database):
+    
+    You can double check your connection credentials using the `include/test_script.py` script. To run the script inside of the Airflow scheduler container run `astro dev bash -s` and then `python include/test_script.py`.
 
-This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
+7. Manually trigger DAGs by clicking the play button for each DAG on the right side of the screen.
 
-- Postgres: Airflow's Metadata Database
-- Webserver: The Airflow component responsible for rendering the Airflow UI
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+## DAGs
 
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
+This repo contains 4 DAGs showing different ways to interact with DuckDB and MotherDuck from within Airflow:
 
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either [stop your existing Docker containers or change the port](https://docs.astronomer.io/astro/test-and-troubleshoot-locally#ports-are-not-available).
+- `duckdb_in_taskflow`: This DAG uses the `duckdb` Python package directly to connect. Note that some tasks will fail if no MotherDuck token was provided.
+- `duckdb_provider_example`: This DAG uses the DuckDBHook from the DuckDB Airflow provider to connect to DuckDB and MotherDuck.
+- `duckdb_custom_operator_example`: This DAG uses the custom local operator `ExcelToDuckDBOperator` which is stored in `include/duckdb_operator.py` to load the contents of an Excel file (`include/ducks_in_the_pond`) into a DuckDB or MotherDuck database.
+- `duckdb_and_astro_sdk_example`: This DAG uses the Astro SDK to connect to perform a simple ELT pipeline with local DuckDB. Note that Astro SDK support for MotherDuck is coming soon. :)
 
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
+## See also
 
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
+- [DuckDB Airflow provider](https://registry.astronomer.io/providers/airflow-provider-duckdb/versions/latest)
+- [Airflow and DuckDB tutorial](https://docs.astronomer.io/learn/airflow-duckdb)
+- [MotherDuck](https://motherduck.com/)
+- [DuckDB](https://duckdb.org/)
 
-Deploy Your Project to Astronomer
-=================================
-
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://docs.astronomer.io/cloud/deploy-code/
-
-Contact
-=======
-
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.

@@ -112,7 +112,7 @@ def duckdb_in_taskflow():
     @task
     def local_table_to_motherduck(local_duckdb_storage_path):
         "Load data from a local DuckDB table into a table in MotherDuck."
-        
+
         conn = duckdb.connect(f"md:?token={MOTHERDUCK_TOKEN}")
         conn.execute(f"ATTACH '{local_duckdb_storage_path}'")
         databases = conn.execute("SHOW DATABASES").fetchall()

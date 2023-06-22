@@ -13,9 +13,9 @@ from duckdb_provider.hooks.duckdb_hook import DuckDBHook
 
 CSV_PATH = "include/ducks.csv"
 MOTHERDUCK_CONN_ID = "my_motherduck_conn"
-MOTHERDUCK_TABLE_NAME = "my_motherduck_table"
+MOTHERDUCK_TABLE_NAME = "duckdb_tables"
 LOCAL_DUCKDB_CONN_ID = "my_local_duckdb_conn"
-LOCAL_DUCKDB_TABLE_NAME = "my_local_duckdb_table"
+LOCAL_DUCKDB_TABLE_NAME = "duckdb_tables"
 
 
 @dag(start_date=datetime(2023, 6, 1), schedule=None, catchup=False)

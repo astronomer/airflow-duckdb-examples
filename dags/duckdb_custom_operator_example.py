@@ -9,6 +9,8 @@ from airflow.decorators import dag
 from pendulum import datetime
 from include.custom_operators.duckdb_operator import ExcelToDuckDBOperator
 
+CONNECTION = "my_local_duckdb_conn"  # Set to your connection ID of a DuckDB or MotherDuck connection
+
 
 @dag(start_date=datetime(2023, 6, 1), schedule=None, catchup=False)
 def duckdb_custom_operator_example():
@@ -17,7 +19,7 @@ def duckdb_custom_operator_example():
         table_name="ducks_in_the_pond",
         excel_path="include/ducks_in_the_pond.xlsx",
         sheet_name="Sheet 1",
-        duckdb_conn_id="my_motherduck_conn",
+        duckdb_conn_id=CONNECTION,
     )
 
 

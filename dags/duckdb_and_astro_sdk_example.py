@@ -16,7 +16,7 @@ import pandas as pd
 from airflow.operators.bash import BashOperator
 
 CSV_PATH = "include/ducks.csv"
-DUCKDB_CONN_ID = "my_duckdb_conn"
+DUCKDB_CONN_ID = "my_local_duckdb_conn"  # The Astro SDK is going to include support for MotherDuck soon :)
 DUCKDB_POOL_NAME = "duckdb_pool"
 
 
