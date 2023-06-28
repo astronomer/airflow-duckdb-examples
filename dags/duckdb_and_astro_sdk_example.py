@@ -16,7 +16,7 @@ import pandas as pd
 from airflow.operators.bash import BashOperator
 
 CSV_PATH = "include/ducks.csv"
-DUCKDB_CONN_ID = "my_local_duckdb_conn"  # The Astro SDK is going to include support for MotherDuck soon :)
+DUCKDB_CONN_ID = "my_motherduck_conn"  # Set to your connection ID of a DuckDB or MotherDuck connection
 DUCKDB_POOL_NAME = "duckdb_pool"
 
 
@@ -50,6 +50,8 @@ def duckdb_and_astro_sdk_example():
         load_ducks,
         output_table=Table(conn_id=DUCKDB_CONN_ID, name="three_random_ducks"),
     )
+
+    aql.cleanup()
 
 
 duckdb_and_astro_sdk_example()

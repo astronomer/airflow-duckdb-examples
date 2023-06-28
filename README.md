@@ -16,11 +16,12 @@ This is a small toy repository for you to test different ways of connection [Air
 
 6. In the Airflow UI define the following [Airflow connections](https://docs.astronomer.io/learn/connections):
     - `my_local_duckdb_conn` with the following parameters:
-        - Conn Type: `duckdb`
-        - File (leave blank for in-memory database): `include/my_local_ducks`
+        - **Conn Type**: `duckdb`
+        - **Path to local database file**: `include/my_garden_ducks.db`
     - `my_motherduck_conn` with the following parameters:
-        - Conn Type: `duckdb`
-        - File (leave blank for in-memory database):
+        - **Conn Type**: `duckdb`
+        - **MotherDuck Service token**: your [MotherDuck Service token](https://motherduck.com/docs/authenticating-to-motherduck/)
+        - **MotherDuck database name**: optionally specify a MotherDuck database name
     
     You can double check your connection credentials using the `include/test_script.py` script. To run the script inside of the Airflow scheduler container run `astro dev bash -s` and then `python include/test_script.py`.
 
@@ -33,7 +34,7 @@ This repo contains 4 DAGs showing different ways to interact with DuckDB and Mot
 - `duckdb_in_taskflow`: This DAG uses the `duckdb` Python package directly to connect. Note that some tasks will fail if no MotherDuck token was provided.
 - `duckdb_provider_example`: This DAG uses the DuckDBHook from the DuckDB Airflow provider to connect to DuckDB and MotherDuck.
 - `duckdb_custom_operator_example`: This DAG uses the custom local operator `ExcelToDuckDBOperator` which is stored in `include/duckdb_operator.py` to load the contents of an Excel file (`include/ducks_in_the_pond`) into a DuckDB or MotherDuck database.
-- `duckdb_and_astro_sdk_example`: This DAG uses the Astro SDK to connect to perform a simple ELT pipeline with local DuckDB. Note that Astro SDK support for MotherDuck is coming soon. :)
+- `duckdb_and_astro_sdk_example`: This DAG uses the Astro SDK to connect to perform a simple ELT pipeline either a local DuckDB database or a MotherDuck database.
 
 ## See also
 
